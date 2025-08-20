@@ -2,21 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const News = () => {
+export const Blogs = () => {
   const [news, setNews] = useState([]);
-  const [user, setUser] = useState([]);
+  const [blog, setBlog] = useState([]);
   const [query, setQuery] = useState("apple");
   const navigate =useNavigate()
 
-  const fetchUser = async (query) => {
-    const url = "http://localhost:8000/users/all";
+  const fetchBlog = async () => {
+    const url = "http://localhost:8000/blog/all";
     const response = await axios.get(url);
     console.log(response, "response");
 
-    setUser(response?.data);
+    setBlog(response?.data);
   };
 
-  console.log(user, "user");
+  console.log(blog, "blog");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export const News = () => {
   };
 
   useEffect(() => {
-    fetchUser(query);
+    fetchBlog();
   }, []);
 
   return (
@@ -65,11 +65,11 @@ export const News = () => {
     //       </div>
     //     </div>
     <div className="grid grid-cols-3 gap-4">
-      {user?.map((item, index) => (
-        <div onClick={()=>navigate(`${item?._id}`)}  key={index} className="border-1">
-          <h1> name : {item?.name}</h1>
-          <h1>email: {item?.email}</h1>
-          <h1>age: {item?.age}</h1>
+      {blog?.map((item, index) => (
+        <div onClick={()=>navigate(`${item?._id}`)}  key={index} className="border-1 p-4 text-center">
+          <h1 className="font-bold text-red-400"> title : {item?.title}</h1>
+          <h1 className="font-bold text-green-400">content: {item?.content}</h1>
+          <h1>authorname: {item?.author?.name}</h1>
         </div>
       ))}
     </div>
