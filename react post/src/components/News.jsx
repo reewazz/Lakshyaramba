@@ -2,21 +2,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const Blogs = () => {
+export const News = () => {
   const [news, setNews] = useState([]);
-  const [blog, setBlog] = useState([]);
+  const [user, setUser] = useState([]);
   const [query, setQuery] = useState("apple");
   const navigate =useNavigate()
 
-  const fetchBlog = async () => {
-    const url = "http://localhost:8000/blog/all";
+  const fetchUser = async (query) => {
+    const url = "http://localhost:8000/users/all";
     const response = await axios.get(url);
     console.log(response, "response");
 
-    setBlog(response?.data);
+    setUser(response?.data);
   };
 
-  console.log(blog, "blog");
+  console.log(user, "user");
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ export const Blogs = () => {
   };
 
   useEffect(() => {
-    fetchBlog();
+    fetchUser(query);
   }, []);
 
   return (
@@ -64,43 +64,14 @@ export const Blogs = () => {
     //         ))}
     //       </div>
     //     </div>
-   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-  {blog?.map((item, index) => (
-    <div
-      key={index}
-      onClick={() => navigate(`${item?._id}`)}
-      className="cursor-pointer bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
-    >
-      <img
-        src={item?.image}
-        alt="Blog"
-        className="h-48 w-full object-cover"
-      />
-      <div className="p-4 text-left">
-        <h2 className="text-xl font-semibold text-gray-800 mb-2 truncate">
-          {item?.title}
-        </h2>
-        <p className="text-sm text-gray-500 mb-1">
-          Category: <span className="text-blue-600">{item?.category}</span>
-        </p>
-        <div className="text-xs text-gray-400">
-          Author: {item?.author?.name}
+    <div className="grid grid-cols-3 gap-4">
+      {user?.map((item, index) => (
+        <div onClick={()=>navigate(`${item?._id}`)}  key={index} className="border-1">
+          <h1> name : {item?.name}</h1>
+          <h1>email: {item?.email}</h1>
+          <h1>age: {item?.age}</h1>
         </div>
-        {/* Tags */}
-        <div className="mt-3 flex flex-wrap gap-2">
-          {item?.tags?.[0]?.map((tag, i) => (
-            <span
-              key={i}
-              className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-      </div>
+      ))}
     </div>
-  ))}
-</div>
-
   );
 };
